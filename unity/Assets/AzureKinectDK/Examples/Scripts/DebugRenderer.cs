@@ -69,26 +69,30 @@ public class DebugRenderer : MonoBehaviour
             }*/
         }
         
-        using (var frame = tracker.PopResult())
+        using (BodyFrame frame = tracker.PopResult())
         {
-            Debug.LogFormat("{0} bodies found.", frame.NumBodies);
-            if (frame.NumBodies > 0)
+            Debug.LogFormat("{0} bodies found.", frame.BodyCount);
+            if (frame.BodyCount > 0)
             {
-                var bodyId = frame.GetBodyId(0);
-                Debug.LogFormat("bodyId={0}", bodyId);
-                this.skeleton = frame.GetSkeleton(0);
-                for (var i = 0; i < (int)JointType.Count; i++)
-                {
-                    var joint = this.skeleton.Joints[i];
+                var bodies = new List<Body>();
+                frame.GetBodies(addBody, ref bodies);
+
+                var body = bodies[0];
+                foreach (var pair in body.Joints) {
+
+                    var joint = pair.Value;
                     var pos = joint.Position;
-                    var rot = joint.Orientation;
-                    var v = new Vector3(pos[0], -pos[1], pos[2]) * 0.004f;
-                    var r = new Quaternion(rot[1], rot[2], rot[3], rot[0]);
-                    var obj = debugObjects[i];
+                    var orientation = joint.Orientation;
+                    var v = new Vector3(pos.X, -pos.Y, pos.Z) * 0.004f;
+                    var r = new Quaternion(orientation.X, orientation.Y, orientation.Z, orientation.W);
+                    var obj = debugObjects[(int)pair.Key];
                     obj.transform.SetPositionAndRotation(v, r);
                 }
-                
             }
         }
+    }
+
+    private void addBody(Body body, ref List<Body> collection) {
+        collection.Add(body);
     }
 }

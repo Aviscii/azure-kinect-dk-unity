@@ -1,17 +1,21 @@
 ﻿// Copyright (c) Takahiro Horikawa. All rights reserved.
 // Licensed under the MIT License.
 using System;
+using System.Collections.Generic;
 
 namespace Microsoft.Azure.Kinect.Sensor.BodyTracking
 {
     public class BodyFrame : IDisposable
     {
+
+        public delegate void AddBodyHandler<T>(Body body, ref T collection);
+
         internal BodyFrame(BodyTrackingNativeMethods.k4abt_frame_t handle)
         {
             this.handle = handle;
         }
         
-        public UInt32 NumBodies
+        public UInt32 BodyCount
         {
             get
             {
@@ -43,6 +47,29 @@ namespace Microsoft.Azure.Kinect.Sensor.BodyTracking
                 if (disposedValue)
                     throw new ObjectDisposedException(nameof(BodyFrame));
                 return BodyTrackingNativeMethods.k4abt_frame_get_body_id(handle, index);
+            }
+        }
+
+        /// <summary>
+        /// Fills the given collection with the bodies in this frame via the passed method
+        /// The function takes the collection argument reference
+        /// </summary>
+        public T GetBodies<T>(AddBodyHandler<T> add, ref T collection)
+        {
+            lock (this) {
+                UInt32 id;
+                Skeleton skeleton;
+
+                for (UInt32 index = 0; index < BodyCount; index++) {
+                    BodyTrackingNativeMethods.k4abt_frame_get_body_skeleton(handle, index, out skeleton);
+                    id = BodyTrackingNativeMethods.k4abt_frame_get_body_id(handle, index);
+
+                    Body body = new Body (id, skeleton);
+
+                    add(body, ref collection);
+                }
+
+                return collection;
             }
         }
 
