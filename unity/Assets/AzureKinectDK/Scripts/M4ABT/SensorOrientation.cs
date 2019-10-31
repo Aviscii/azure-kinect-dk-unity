@@ -6,25 +6,32 @@ using System.Runtime.InteropServices;
 
 namespace Microsoft.Azure.Kinect.Sensor
 {
-    [Native.NativeReference("k4abt_sensor_orientation_t ")]
+    [Native.NativeReference("k4abt_sensor_orientation_t")]
     public enum SensorOrientation
     {
+        [Native.NativeReference("K4ABT_SENSOR_ORIENTATION_DEFAULT")]
         /// <summary>
         /// Mount the sensor at its default orientation.
         /// </summary>
-        K4ABT_SENSOR_ORIENTATION_DEFAULT = 0,
+        OrientationDefault = 0,
+
+        [Native.NativeReference("K4ABT_SENSOR_ORIENTATION_CLOCKWISE90")]
         /// <summary>
         /// Clockwisely rotate the sensor 90 degree.
         /// </summary>
-        K4ABT_SENSOR_ORIENTATION_CLOCKWISE90,
+        OrientationClockwise90,
+
+        [Native.NativeReference("K4ABT_SENSOR_ORIENTATION_COUNTERCLOCKWISE90")]
         /// <summary>
         /// Counter-clockwisely rotate the sensor 90 degrees.
         /// </summary>
-        K4ABT_SENSOR_ORIENTATION_COUNTERCLOCKWISE90,
+        OrientationCounterClockwise90,
+
+        [Native.NativeReference("K4ABT_SENSOR_ORIENTATION_FLIP180")]
         /// <summary>
         /// Mount the sensor upside-down.
         /// </summary>
-        K4ABT_SENSOR_ORIENTATION_FLIP180,
+        OrientationFlip180,
 
     }
 }

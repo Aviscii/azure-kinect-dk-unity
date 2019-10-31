@@ -6,4 +6,7 @@ onnxruntime.dll
 depthengine_1_0.dll
 depthengine_2_0.dll
 dnn_model_2_0.onnx
+/unity/Library
+/unity/Temp
+/unity/obj
 

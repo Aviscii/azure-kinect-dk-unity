@@ -4,7 +4,7 @@
 namespace Microsoft.Azure.Kinect.Sensor.BodyTracking
 {
     [Native.NativeReference("k4abt_joint_id_t")]
-    public enum JointId
+    public enum JointType
     {
         Pelvis = 0, SpineNaval, SpineChest, Neck,
         ClavicleLeft, ShoulderLeft, ElbowLeft, WristLeft,

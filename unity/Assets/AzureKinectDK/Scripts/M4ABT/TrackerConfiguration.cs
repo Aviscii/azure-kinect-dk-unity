@@ -7,12 +7,12 @@ using System.Runtime.InteropServices;
 namespace Microsoft.Azure.Kinect.Sensor
 {
     [StructLayout(LayoutKind.Sequential)]
-    [Native.NativeReference("k4abt_tracker_configuration_t ")]
-    public struct TrackerCalibration
+    [Native.NativeReference("k4abt_tracker_configuration_t")]
+    public struct TrackerConfiguration
     {
 
-        public SensorOrientation sensor_orientation;
+        public SensorOrientation SensorOrientation;
 
-        public int cpu_only_mode;
+        public bool CpuOnlyMode;
     }
 }

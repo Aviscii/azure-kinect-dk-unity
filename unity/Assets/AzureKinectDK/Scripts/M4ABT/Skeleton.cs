@@ -10,7 +10,7 @@ namespace Microsoft.Azure.Kinect.Sensor.BodyTracking
     [Native.NativeReference("k4abt_skeleton_t")]
     public struct Skeleton
     {
-        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.Struct, SizeConst = (int)JointId.Count)]
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.Struct, SizeConst = (int)JointType.Count)]
         public Joint[] Joints;
     }
 
@@ -18,30 +18,37 @@ namespace Microsoft.Azure.Kinect.Sensor.BodyTracking
     [Native.NativeReference("k4abt_joint_confidence_level_t")]
     public enum JointConfidenceLevel
     {
+        [Native.NativeReference("K4ABT_JOINT_CONFIDENCE_NONE")]
         /// <summary>
         /// The joint is out of range (too far from depth camera)
         /// </summary>
-        K4ABT_JOINT_CONFIDENCE_NONE = 0,
+        None = 0,
+
+        [Native.NativeReference("K4ABT_JOINT_CONFIDENCE_LOW")]
         /// <summary>
         /// The joint is not observed (likely due to occlusion), predicted joint pose.
         /// </summary>
-        K4ABT_JOINT_CONFIDENCE_LOW,
+        Low,
+
+        [Native.NativeReference("K4ABT_JOINT_CONFIDENCE_MEDIUM")]
         /// <summary>
         /// Medium confidence in joint pose.
         /// 
         /// Current SDK will only provide joints up to this confidence level
         /// </summary>
-        K4ABT_JOINT_CONFIDENCE_MEDIUM,
+        Medium,
+
         /// <summary>
         /// High confidence in joint pose.
         /// 
         /// Placeholder for future SDK
         /// </summary>
-        K4ABT_JOINT_CONFIDENCE_HIGH,
+        High,
+
         /// <summary>
         /// The total number of confidence levels.
         /// </summary>
-        K4ABT_JOINT_CONFIDENCE_LEVELS_COUNT
+        Count
     }
 
     [StructLayout(LayoutKind.Sequential)]
