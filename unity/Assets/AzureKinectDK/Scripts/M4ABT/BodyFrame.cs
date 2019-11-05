@@ -8,8 +8,6 @@ namespace Microsoft.Azure.Kinect.Sensor.BodyTracking
     public class BodyFrame : IDisposable
     {
 
-        public delegate void AddBodyHandler<T>(Body body, ref T collection);
-
         internal BodyFrame(BodyTrackingNativeMethods.k4abt_frame_t handle)
         {
             this.handle = handle;
@@ -51,25 +49,33 @@ namespace Microsoft.Azure.Kinect.Sensor.BodyTracking
         }
 
         /// <summary>
-        /// Fills the given collection with the bodies in this frame via the passed method
-        /// The function takes the collection argument reference
+        /// Give back all the bodies stored in this frame
         /// </summary>
-        public T GetBodies<T>(AddBodyHandler<T> add, ref T collection)
+        public Body[] Bodies
         {
-            lock (this) {
-                UInt32 id;
-                Skeleton skeleton;
+            get
+            {
+                lock (this)
+                {
+                    UInt32 id;
+                    Skeleton skeleton;
 
-                for (UInt32 index = 0; index < BodyCount; index++) {
-                    BodyTrackingNativeMethods.k4abt_frame_get_body_skeleton(handle, index, out skeleton);
-                    id = BodyTrackingNativeMethods.k4abt_frame_get_body_id(handle, index);
+                    var bodies = new Body[BodyCount];
 
-                    Body body = new Body (id, skeleton);
+                    for (UInt32 index = 0; index < BodyCount; index++) {
+                        BodyTrackingNativeMethods.k4abt_frame_get_body_skeleton(handle, index, out skeleton);
+                        id = BodyTrackingNativeMethods.k4abt_frame_get_body_id(handle, index);
 
-                    add(body, ref collection);
+                        Body body = new Body {
+                            TrackingId = id,
+                            Skeleton = skeleton
+                        };
+
+                        bodies[index] = body;
+                    }
+
+                    return bodies;
                 }
-
-                return collection;
             }
         }
 
