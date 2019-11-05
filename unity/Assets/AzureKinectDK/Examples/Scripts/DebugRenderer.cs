@@ -74,25 +74,20 @@ public class DebugRenderer : MonoBehaviour
             Debug.LogFormat("{0} bodies found.", frame.BodyCount);
             if (frame.BodyCount > 0)
             {
-                var bodies = new List<Body>();
-                frame.GetBodies(addBody, ref bodies);
+                var bodies = frame.Bodies;
 
                 var body = bodies[0];
-                foreach (var pair in body.Joints) {
+                for(JointType jt = 0; jt < JointType.Count; jt++) {
 
-                    var joint = pair.Value;
+                    var joint = body.Skeleton.Joints[(int)jt];
                     var pos = joint.Position;
                     var orientation = joint.Orientation;
                     var v = new Vector3(pos.X, -pos.Y, pos.Z) * 0.004f;
                     var r = new Quaternion(orientation.X, orientation.Y, orientation.Z, orientation.W);
-                    var obj = debugObjects[(int)pair.Key];
+                    var obj = debugObjects[(int)jt];
                     obj.transform.SetPositionAndRotation(v, r);
                 }
             }
         }
-    }
-
-    private void addBody(Body body, ref List<Body> collection) {
-        collection.Add(body);
     }
 }
